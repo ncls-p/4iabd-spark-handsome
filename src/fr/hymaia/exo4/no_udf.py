@@ -5,6 +5,8 @@ from pyspark.sql import functions as f
 
 
 def main():
+    start_time = time.time()
+
     spark = SparkSession.builder.appName(
         "exo4").master("local[*]").getOrCreate()
 
@@ -15,8 +17,4 @@ def main():
         .otherwise(("furniture")))
     )
     df1.show()
-
-
-start_time = time.time()
-main()
-print("--- %s seconds ---" % (time.time() - start_time))
+    print("--- %s seconds ---" % (time.time() - start_time))

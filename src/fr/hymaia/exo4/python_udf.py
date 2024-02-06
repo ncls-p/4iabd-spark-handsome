@@ -15,6 +15,7 @@ def category_name(category):
 
 
 def main():
+    start_time = time.time()
     spark = SparkSession.builder.appName(
         "exo4").master("local[*]").getOrCreate()
 
@@ -22,8 +23,4 @@ def main():
     df1 = df1.withColumn("category_name", category_name(df1["category"]))
 
     df1.show()
-
-
-start_time = time.time()
-main()
-print("--- %s seconds ---" % (time.time() - start_time))
+    print("--- %s seconds ---" % (time.time() - start_time))
