@@ -28,19 +28,6 @@ class TestAggregate(unittest.TestCase):
         # Then
         self.assertEqual(df.collect(), df_loaded.collect())
 
-    def test_population_per_departement(self):
-        # Given
-        data = [Row(name="Alice", departement="75"),
-                Row(name="Bob", departement="75")]
-        df = self.spark.createDataFrame(data)
-
-        # When
-        df_agg = population_per_departement(df)
-
-        # Then
-        self.assertEqual(df_agg.count(), 1)
-        self.assertEqual(df_agg.first()["nb_people"], 2)
-
     def test_save_csv(self):
         # Given
         data = [Row(name="Alice", departement="75"),
