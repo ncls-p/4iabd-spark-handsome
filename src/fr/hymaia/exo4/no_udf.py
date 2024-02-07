@@ -1,8 +1,8 @@
-from curses import window
 import time
 
 from pyspark.sql import SparkSession
 from pyspark.sql import functions as f
+from pyspark.sql.window import Window
 
 
 def main():
@@ -17,5 +17,35 @@ def main():
         f.when(f.col("category") < 6, "food")
         .otherwise(("furniture")))
     )
-    df1.show()
+
     print("--- %s seconds ---" % (time.time() - start_time))
+
+    df1 = df1.withColumn("date", f.to_date("date"))
+
+    df1 = calculate_total_price_per_category_per_day(df1)
+
+    df1 = calculate_total_price_per_category_per_day_last_30_days(df1)
+
+    df1.show(31)
+
+
+def calculate_total_price_per_category_per_day(df):
+    window_spec = Window.partitionBy("category", "date")
+
+    df = df.withColumn("total_price_per_category_per_day",
+                       f.sum("price").over(window_spec))
+
+    return df
+
+
+def calculate_total_price_per_category_per_day_last_30_days(df):
+    window_spec = Window.orderBy("date").rowsBetween(-29, 0)
+
+    df = df.withColumn("total_price_per_category_per_day_last_30_days", f.sum(
+        "price").over(window_spec))
+
+    return df
+
+
+if __name__ == "__main__":
+    main()
