@@ -19,10 +19,9 @@ def addCategoryName(col):
 
 
 def main():
-    start_time = time.time()
     df1 = spark.read.csv("src/resources/exo4/sell.csv", header=True)
-
+    start_time = time.time()
     df1 = df1.withColumn("category_name", addCategoryName(df1["category"]))
+    print("--- %s seconds ---" % (time.time() - start_time))
 
     df1.show()
-    print("--- %s seconds ---" % (time.time() - start_time))

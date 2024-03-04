@@ -15,12 +15,11 @@ def category_name(category):
 
 
 def main():
-    start_time = time.time()
     spark = SparkSession.builder.appName(
         "exo4").master("local[*]").getOrCreate()
 
     df1 = spark.read.csv("src/resources/exo4/sell.csv", header=True)
+    start_time = time.time()
     df1 = df1.withColumn("category_name", category_name(df1["category"]))
-
-    df1.show()
     print("--- %s seconds ---" % (time.time() - start_time))
+    df1.show()
