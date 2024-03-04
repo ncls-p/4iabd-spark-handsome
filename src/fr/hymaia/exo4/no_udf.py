@@ -17,16 +17,11 @@ def main():
         f.when(f.col("category") < 6, "food")
         .otherwise(("furniture")))
     )
-
-    print("--- %s seconds ---" % (time.time() - start_time))
-
     df1 = df1.withColumn("date", f.to_date("date"))
-
     df1 = calculate_total_price_per_category_per_day(df1)
-
     df1 = calculate_total_price_per_category_per_day_last_30_days(df1)
-
     df1.show(31)
+    print("--- %s seconds ---" % (time.time() - start_time))
 
 
 def calculate_total_price_per_category_per_day(df):
@@ -39,12 +34,15 @@ def calculate_total_price_per_category_per_day(df):
 
 
 def calculate_total_price_per_category_per_day_last_30_days(df):
-    window_spec = Window.orderBy("date").rowsBetween(-29, 0)
+
+    df = df.dropDuplicates(['date', "category_name"])
+    window_spec = Window.partitionBy(
+        "category_name").orderBy("date").rowsBetween(-29, 0)
 
     df = df.withColumn("total_price_per_category_per_day_last_30_days", f.sum(
         "price").over(window_spec))
 
-    return df
+    return df.select("id", "date", "category", "price", "category_name", "total_price_per_category_per_day_last_30_days")
 
 
 if __name__ == "__main__":
