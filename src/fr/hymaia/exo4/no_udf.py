@@ -6,22 +6,21 @@ from pyspark.sql.window import Window
 
 
 def main():
-
     spark = SparkSession.builder.appName(
         "exo4").master("local[*]").getOrCreate()
 
     df1 = spark.read.csv("src/resources/exo4/sell.csv", header=True)
 
-    start_time = time.time()
     df1 = df1.withColumn("category_name", (
         f.when(f.col("category") < 6, "food")
         .otherwise(("furniture")))
     )
-
+    start_time = time.time()
+    df1.count()
+    print("--- %s seconds ---" % (time.time() - start_time))
     df1 = df1.withColumn("date", f.to_date("date"))
     df1 = calculate_total_price_per_category_per_day(df1)
     df1 = calculate_total_price_per_category_per_day_last_30_days(df1)
-    print("--- %s seconds ---" % (time.time() - start_time))
 
 
 def calculate_total_price_per_category_per_day(df):
