@@ -17,11 +17,11 @@ def main():
         f.when(f.col("category") < 6, "food")
         .otherwise(("furniture")))
     )
-    print("--- %s seconds ---" % (time.time() - start_time))
 
     df1 = df1.withColumn("date", f.to_date("date"))
     df1 = calculate_total_price_per_category_per_day(df1)
     df1 = calculate_total_price_per_category_per_day_last_30_days(df1)
+    print("--- %s seconds ---" % (time.time() - start_time))
 
 
 def calculate_total_price_per_category_per_day(df):
