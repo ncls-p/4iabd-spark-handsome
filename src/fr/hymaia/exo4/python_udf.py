@@ -22,4 +22,3 @@ def main():
     start_time = time.time()
     df1 = df1.withColumn("category_name", category_name(df1["category"]))
     print("--- %s seconds ---" % (time.time() - start_time))
-    df1.show()

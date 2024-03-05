@@ -64,6 +64,4 @@ def main():
     df_reordered = order_columns(
         df_with_departement, ["zip", "departement", "city", "age", "name"])
 
-    df_reordered.show()
-
     save_parquet(df_reordered, "data/exo2/output")

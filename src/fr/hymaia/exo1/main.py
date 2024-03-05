@@ -16,7 +16,6 @@ def main():
         .format("parquet") \
             .partitionBy("count") \
             .save("data/exo1/output")
-    df.show()
 
 
 def wordcount(df: DataFrame, col_name: str) -> DataFrame:

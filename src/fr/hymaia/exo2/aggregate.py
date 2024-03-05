@@ -28,6 +28,5 @@ def main():
     spark_session = create_session()
     dataframe = get_dataframe_from_parquet(spark_session, "data/exo2/output")
     dataframe = population_per_departement(dataframe)
-    dataframe.show()
 
     save_csv(dataframe, "data/exo2/aggregate")

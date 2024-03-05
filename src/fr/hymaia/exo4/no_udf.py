@@ -22,7 +22,6 @@ def main():
     df1 = df1.withColumn("date", f.to_date("date"))
     df1 = calculate_total_price_per_category_per_day(df1)
     df1 = calculate_total_price_per_category_per_day_last_30_days(df1)
-    df1.show(31)
 
 
 def calculate_total_price_per_category_per_day(df):
